@@ -13,6 +13,23 @@ def get_indexes():
     # shuffle(INDEXES_PAIRS)
 
 
+def get_all_indexes():
+    return INDEXES_PAIRS
+
+
+def get_random_indexes(number_of_indexes=36):
+    """gets a number of random indexes and returns a list of random indexes of the board"""
+    cells_indexes = []
+    for i in range(number_of_indexes):
+        found_new_index = False
+        while not found_new_index:
+            random_indexes = choice(INDEXES_PAIRS)
+            if random_indexes not in cells_indexes:
+                cells_indexes.append(random_indexes)
+                found_new_index = True
+    return cells_indexes
+
+
 class SudokuBoard:
     def __init__(self):
         self.board = []
@@ -38,7 +55,7 @@ class SudokuBoard:
         while len(available_numbers) > 0:
             # pick a number and try it on the board
             random_number = choice(available_numbers)
-            if self.__is_legal_assignment(current_row, current_column, random_number):
+            if self.is_legal_assignment(current_row, current_column, random_number):
                 # put it in the board and move on
                 self.board[current_row][current_column] = random_number
                 success = self.__backtrack_fill_board(indexes_pair_idx + 1)
@@ -62,9 +79,7 @@ class SudokuBoard:
         random_number = choice(NUMBERS)
         positions.pop(random_position)
 
-
-
-    def __is_legal_assignment(self, row, col, number):
+    def is_legal_assignment(self, row, col, number):
         """for a given cell indexes and a number, checks if the assignment is legal
         return True if legal or False otherwise."""
         a = self.__is_legal_row_assignment(row, number)
