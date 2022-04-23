@@ -29,8 +29,8 @@ def validate(value, row, col):
         if int(value) > 0 or int(value) <= 9:
             print(f'nice its a number: {value}, row: {row} col: {col} ')
             print('checking if it is a legal assignment')
-            if GAME.playing_board.is_legal_assignment(int(row), int(col), value):
-                GAME.playing_board.board[int(row)][int(col)] = value
+            if GAME.playing_board.is_legal_assignment(int(row), int(col), int(value)):
+                GAME.playing_board.board[int(row)][int(col)] = int(value)
                 return True
             else:
                 tkinter.messagebox.showwarning("Warning", "Illegal move")
