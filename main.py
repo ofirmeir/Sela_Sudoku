@@ -22,13 +22,13 @@ def btn_new_board_clicked(window):
 
 
 def validate(value, row, col, window):
-    '''register'''
+    """validation method checks if every assignment on the board UI is legal"""
     global GAME
     try:
         int(value)
         if 0 < int(value) <= 9:
-            print(f'nice its a number: {value}, row: {row} col: {col} ')
-            print('checking if it is a legal assignment')
+            # print(f'nice its a number: {value}, row: {row} col: {col} ')
+            # print('checking if it is a legal assignment')
             if GAME.playing_board.is_legal_assignment(int(row), int(col), int(value)):
                 GAME.playing_board.board[int(row)][int(col)] = int(value)
                 if GAME.is_game_over():
@@ -41,18 +41,13 @@ def validate(value, row, col, window):
             tkinter.messagebox.showwarning("Warning", "Illegal move")
             return False
     except Exception as e:
-        print(e)
+        # print(e)
         if value == '':
             GAME.playing_board.board[int(row)][int(col)] = 0
             return True
         else:
             return False
     return False
-
-
-def on_invalid():
-    print("damn")
-    pass
 
 
 def start_game():
@@ -65,8 +60,9 @@ def open_game_window():
     global GAME
     # create the window
     game_window = Toplevel()
-    game_window.title("Sela Sudoku")
+    game_window.title(f"Sela Sudoku - filled {DIFFICULTY} numbers")
     game_window.config(padx=100, pady=50)
+    game_window.resizable(False, False)
 
     GAME = SudokuGame()
     GAME.set_play_board(DIFFICULTY)
@@ -87,12 +83,10 @@ def open_game_window():
                                    bg='white',
                                    justify=CENTER)
             else:
-                v = StringVar('')
+                # v = StringVar('')
                 entry_text = Entry(game_window,
-
                                    width=CELL_WIDTH,
-                                   justify=CENTER
-                                   )
+                                   justify=CENTER)
 
                 entry_text.config(validate="key", validatecommand=(reg, '%P', row, col, game_window))
 
@@ -109,6 +103,8 @@ def open_game_window():
 difficulty_window = Tk()
 difficulty_window.geometry('200x250')
 difficulty_window.title("New Game")
+# disable Maximize button
+difficulty_window.attributes('-toolwindow', True)
 
 label_welcome = Label(difficulty_window, text='Choose the difficulty level: ')
 label_welcome.grid(row=0, column=0)

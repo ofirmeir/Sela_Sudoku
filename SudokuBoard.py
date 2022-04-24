@@ -41,7 +41,7 @@ class SudokuBoard:
 
     def fill_board(self):
         get_indexes()
-        self.__backtrack_fill_board(0)
+        self.__backtrack_fill_board(indexes_pair_idx=0)
 
     def __backtrack_fill_board(self, indexes_pair_idx):
         """fills the board with legal assignment using backtracking"""

@@ -13,7 +13,7 @@ class SudokuGame:
         pass
 
     def set_play_board(self, number_of_filled_cells=36):
-        cells_indexes = get_random_indexes()
+        cells_indexes = get_random_indexes(number_of_filled_cells)
         print(number_of_filled_cells)
         playing_board = SudokuBoard()
         for index_pair in INDEXES_PAIRS:
