@@ -21,23 +21,29 @@ def btn_new_board_clicked(window):
     difficulty_window.deiconify()
 
 
-def validate(value, row, col):
+def validate(value, row, col, window):
     '''register'''
     global GAME
     try:
         int(value)
-        if int(value) > 0 or int(value) <= 9:
+        if 0 < int(value) <= 9:
             print(f'nice its a number: {value}, row: {row} col: {col} ')
             print('checking if it is a legal assignment')
             if GAME.playing_board.is_legal_assignment(int(row), int(col), int(value)):
                 GAME.playing_board.board[int(row)][int(col)] = int(value)
+                if GAME.is_game_over():
+                    tkinter.messagebox.showinfo("Success", "You've completed the board!")
                 return True
             else:
                 tkinter.messagebox.showwarning("Warning", "Illegal move")
+                return False
+        else:
+            tkinter.messagebox.showwarning("Warning", "Illegal move")
+            return False
     except Exception as e:
         print(e)
         if value == '':
-            GAME.playing_board[row][col] = value
+            GAME.playing_board.board[int(row)][int(col)] = 0
             return True
         else:
             return False
@@ -46,17 +52,6 @@ def validate(value, row, col):
 
 def on_invalid():
     print("damn")
-    pass
-
-
-def value_inserted(event):
-    print("got it")
-    print(event)
-    pass
-
-
-# create conversion method
-def btn_clicked():
     pass
 
 
@@ -94,13 +89,12 @@ def open_game_window():
             else:
                 v = StringVar('')
                 entry_text = Entry(game_window,
-                                   textvariable=v,
+
                                    width=CELL_WIDTH,
                                    justify=CENTER
                                    )
-                # v.(command=lambda: value_inserted(v.get(), row, col))
-                # entry_text.bind('<Return>', value_inserted)
-                entry_text.config(validate="key", validatecommand=(reg, '%P', row, col))
+
+                entry_text.config(validate="key", validatecommand=(reg, '%P', row, col, game_window))
 
             entry_text.grid(row=row, column=col)
             entries_list.append(entry_text)
