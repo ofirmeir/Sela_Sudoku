@@ -1,7 +1,11 @@
-from random import choice, shuffle
+from random import choice
+
+# CONSTANTS
 
 NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 INDEXES_PAIRS = []
+
+# STATIC METHODS
 
 
 def get_indexes():
@@ -10,11 +14,6 @@ def get_indexes():
     for row in range(9):
         for col in range(9):
             INDEXES_PAIRS.append((row, col))
-    # shuffle(INDEXES_PAIRS)
-
-
-def get_all_indexes():
-    return INDEXES_PAIRS
 
 
 def get_random_indexes(number_of_indexes=36):
@@ -34,12 +33,12 @@ class SudokuBoard:
     def __init__(self):
         self.board = []
         self.__create_empty_board()
-        pass
 
     def __create_empty_board(self):
         self.board = [[0 for i in range(9)] for _ in range(9)]
 
     def fill_board(self):
+        """fill board legally and recursively using a helper method"""
         get_indexes()
         self.__backtrack_fill_board(indexes_pair_idx=0)
 
@@ -73,18 +72,9 @@ class SudokuBoard:
             self.board[current_row][current_column] = 0
             return
 
-    def is_move_legal(self, number, available_positions):
-        positions = available_positions
-        random_position = choice(positions)
-        random_number = choice(NUMBERS)
-        positions.pop(random_position)
-
     def is_legal_assignment(self, row, col, number):
         """for a given cell indexes and a number, checks if the assignment is legal
         return True if legal or False otherwise."""
-        a = self.__is_legal_row_assignment(row, number)
-        b = self.__is_legal_column_assignment(col, number)
-        c = self.__is_legal_box_assignment(row, col, number)
         return self.__is_legal_row_assignment(row, number) \
                and self.__is_legal_column_assignment(col, number) \
                and self.__is_legal_box_assignment(row, col, number)

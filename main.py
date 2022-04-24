@@ -1,7 +1,8 @@
-import tkinter.messagebox
-from tkinter import *
-from tkinter import Tk, Label, Entry, Button, Toplevel, Radiobutton, StringVar, END
+# from tkinter import *
+from tkinter import Tk, Label, Entry, Button, Toplevel, Radiobutton, StringVar, messagebox, RIGHT, IntVar, CENTER
 from SudokuGame import SudokuGame
+
+# CONSTANTS
 
 DIFFICULTY = 0
 CELL_WIDTH = 4
@@ -21,27 +22,24 @@ def btn_new_board_clicked(window):
     difficulty_window.deiconify()
 
 
-def validate(value, row, col, window):
+def validate(value, row, col):
     """validation method checks if every assignment on the board UI is legal"""
     global GAME
     try:
         int(value)
         if 0 < int(value) <= 9:
-            # print(f'nice its a number: {value}, row: {row} col: {col} ')
-            # print('checking if it is a legal assignment')
             if GAME.playing_board.is_legal_assignment(int(row), int(col), int(value)):
                 GAME.playing_board.board[int(row)][int(col)] = int(value)
                 if GAME.is_game_over():
-                    tkinter.messagebox.showinfo("Success", "You've completed the board!")
+                    messagebox.showinfo("Success", "You've completed the board!")
                 return True
             else:
-                tkinter.messagebox.showwarning("Warning", "Illegal move")
+                messagebox.showwarning("Warning", "Illegal move")
                 return False
         else:
-            tkinter.messagebox.showwarning("Warning", "Illegal move")
+            messagebox.showwarning("Warning", "Illegal move")
             return False
     except Exception as e:
-        # print(e)
         if value == '':
             GAME.playing_board.board[int(row)][int(col)] = 0
             return True
@@ -51,12 +49,14 @@ def validate(value, row, col, window):
 
 
 def start_game():
+    """set the diffiulty of the game and starts the game"""
     global DIFFICULTY
     DIFFICULTY = selected_difficulty.get()
     open_game_window()
 
 
 def open_game_window():
+    """open game window, initializing and handling a game"""
     global GAME
     # create the window
     game_window = Toplevel()
@@ -83,17 +83,16 @@ def open_game_window():
                                    bg='white',
                                    justify=CENTER)
             else:
-                # v = StringVar('')
                 entry_text = Entry(game_window,
                                    width=CELL_WIDTH,
                                    justify=CENTER)
 
-                entry_text.config(validate="key", validatecommand=(reg, '%P', row, col, game_window))
+                entry_text.config(validate="key", validatecommand=(reg, '%P', row, col))
 
             entry_text.grid(row=row, column=col)
             entries_list.append(entry_text)
 
-    # create new button
+    # create new game button
     btn_new_board = Button(game_window, command=game_window.destroy)
     btn_new_board["text"] = "New"
     btn_new_board.grid(row=10, column=9)
@@ -103,6 +102,7 @@ def open_game_window():
 difficulty_window = Tk()
 difficulty_window.geometry('200x250')
 difficulty_window.title("New Game")
+
 # disable Maximize button
 difficulty_window.attributes('-toolwindow', True)
 
@@ -110,22 +110,22 @@ label_welcome = Label(difficulty_window, text='Choose the difficulty level: ')
 label_welcome.grid(row=0, column=0)
 
 selected_difficulty = IntVar()
-row = 1
+row_number = 1
 for (text, value) in RADIO_BTN_DIFFICULTY_SELECTION.items():
     btn_radio = Radiobutton(difficulty_window,
                             text=text,
                             value=value,
                             variable=selected_difficulty,
                             justify=RIGHT)
-    btn_radio.grid(row=row, column=0, sticky='w')
-    row += 1
+    btn_radio.grid(row=row_number, column=0, sticky='w')
+    row_number += 1
 
 DIFFICULTY = selected_difficulty.get()
 
 btn_select = Button(difficulty_window,
                     text="Select",
                     command=start_game)
-btn_select.grid(row=row, column=0)
+btn_select.grid(row=row_number, column=0)
 
 # hold window active
 difficulty_window.mainloop()
